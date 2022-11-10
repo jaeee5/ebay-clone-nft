@@ -211,7 +211,7 @@ function ListingPage({}: Props) {
 
     if (isLoading) return (
         <div>
-            <Header />
+            {/* <Header /> */}
             <div>
                 <p className='text-center animate-pulse text-blue-500'>
                     Loading Item...
@@ -226,7 +226,6 @@ function ListingPage({}: Props) {
 
     return (
         <div>
-            <Header />
             <Toaster 
                 position='top-center'
                 reverseOrder={false}
@@ -234,19 +233,19 @@ function ListingPage({}: Props) {
             <main className='max-w-6xl mx-auto p-2 flex flex-col lg:flex-row space-y-10
                 space-x-5 pr-10'
             >
-                <div className='p-10 border mx-auto lg:mx-0 max-w-md lg:max-w-xl'>
-                    <MediaRenderer src={listing.asset.image}/>
+                <div className='p-10 border rounded-lg  mx-auto lg:mx-0 max-w-md lg:max-w-xl'>
+                    <MediaRenderer className='rounded-lg' src={listing.asset.image}/>
                 </div>
 
                 <section className='flex-1 space-y-5 pb-20 lg:pb-0'>
                     <div>
-                        <h1 className='text-xl font-bold'>
+                        <h1 className='text-xl font-bold dark:text-[#f1f1f1]'>
                             {listing.asset.name}
                         </h1>
                         <p className='text-gray-600'>
                             {listing.asset.description}
                         </p>
-                        <p className='flex items-center text-xs sm:text-base'>
+                        <p className='flex items-center text-xs sm:text-base dark:text-[#f1f1f1]'>
                             <UserCircleIcon className='h-5' />
                             <span className='font-bold pr-2'>Seller: </span> 
                             {listing.sellerAddress}
@@ -254,22 +253,22 @@ function ListingPage({}: Props) {
                     </div>
 
                     <div className='grid grid-cols-2 items-center py-2'>
-                        <p className='font-bold'>
+                        <p className='font-bold dark:text-[#f1f1f1]'>
                             Listing Types:
                         </p>
-                        <p>{listing.type === ListingType.Direct 
+                        <p className='dark:text-[#f1f1f1]'>{listing.type === ListingType.Direct 
                             ? "Direct Listing"
                             : "Auction Listing"}
                         </p>
 
-                        <p className='font-bold'>Buy it Now Price:</p>
-                        <p className='text-3xl font-bold'>
+                        <p className='font-bold dark:text-[#f1f1f1]'>Buy it Now Price:</p>
+                        <p className='text-3xl font-bold dark:text-[#f1f1f1]'>
                             {listing.buyoutCurrencyValuePerToken.displayValue}{" "}
                             {listing.buyoutCurrencyValuePerToken.symbol}
                         </p>
 
                         <button onClick={buyNft}  className='col-start-2 mt-2 bg-blue-600 font-bold text-white
-                            rounded-full w-44 py-4 px-10'
+                            rounded-full w-44 py-4 px-10 dark:text-[#f1f1f1]'
                         >
                             Buy Now
                         </button>
@@ -277,8 +276,8 @@ function ListingPage({}: Props) {
                     {/* if DIRECT, show offers here... */}
                     {listing.type === ListingType.Direct && offers && (
                         <div className='grid grid-cols-2 gap-y-2'>
-                            <p className='font-bold'>Offers: </p>
-                            <p className='font-bold'>{offers?.length > 0 ? offers?.length : 0}</p>
+                            <p className='font-bold dark:text-[#f1f1f1]'>Offers: </p>
+                            <p className='font-bold dark:text-[#f1f1f1]'>{offers?.length > 0 ? offers?.length : 0}</p>
 
                             {offers?.map(offer => (
                                 <>
@@ -295,7 +294,7 @@ function ListingPage({}: Props) {
                                                 offer.offeror + 
                                                 offer.totalOfferAmount.toString()
                                             }
-                                            className='text-sm italic'
+                                            className='text-sm italic dark:text-[#f1f1f1]'
                                         >
                                             {ethers.utils.formatEther(offer.totalOfferAmount)}{" "}{NATIVE_TOKENS[network].symbol}
                                         </p>
@@ -321,7 +320,7 @@ function ListingPage({}: Props) {
                                                         },
                                                     })
                                                 }}
-                                                className='p-2 w-32 bg-red-500/50 rounded-lg font-bold text-xs cursor-pointer'
+                                                className='p-2 w-32 bg-red-500/50 rounded-lg font-bold text-xs cursor-pointer dark:text-[#f1f1f1]'
                                             >
                                                 Accept Offer
                                             </button>
@@ -336,7 +335,7 @@ function ListingPage({}: Props) {
                     <div className='grid grid-cols-2 space-y-2 items-center justify-end'>
                         <hr className='col-span-2' />
 
-                        <p className='col-span-2 font-bold'>
+                        <p className='col-span-2 font-bold dark:text-[#f1f1f1]'>
                             {listing.type === ListingType.Direct
                                 ? "Make an Offer"
                                 : "Bid on this Auction"}
@@ -346,7 +345,7 @@ function ListingPage({}: Props) {
                         {listing.type === ListingType.Auction && (
                             <>
                                 <p>Current Minimum Bid: </p>
-                                <p className='font-bold'>
+                                <p className='font-bold dark:text-[#f1f1f1]'>
                                     {minimumNextBid?.displayValue} {minimumNextBid?.symbol}
                                 </p>
 

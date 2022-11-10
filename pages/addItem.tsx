@@ -74,7 +74,7 @@ function addItem({}: Props) {
 
     return (
         <div>
-            <Header />
+            {/* <Header /> */}
             <Toaster 
                 position='top-center'
                 reverseOrder={false}
@@ -92,7 +92,7 @@ function addItem({}: Props) {
                     md:flex-row md:space-x-5 pt-5
                 '>
                     <img 
-                        className='border h-80 w-80 object-contain'
+                        className='border h-80 w-80 object-contain rounded-lg'
                         src={preview || "https://links.papareact.com/ucj"}
                         alt=""
                     />
@@ -121,6 +121,7 @@ function addItem({}: Props) {
                         <label className='font-light'>Image of the Item</label>
                         <input 
                             type="file" 
+                            className='cursor-pointer rounded-sm'
                             onChange={(e) => {
                                 if (e.target.files?.[0]) {
                                     setPreview(URL.createObjectURL(e.target.files[0]));
