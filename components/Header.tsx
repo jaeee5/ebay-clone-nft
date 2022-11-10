@@ -116,7 +116,7 @@ function Header({}: Props) {
                 </button>
 
                 <Link href='/create'>
-                    <button className='border-2 border-blue-600  px-5 md:px-10 py-2 text-blue-600 flex-shrink
+                    <button className='border-2 border-blue-600  px-2 xs:px-5 md:px-10 xs:py-2 text-blue-600 flex-shrink
                         hover:bg-blue-600/50 hover:text-white'>
                         List Item
                     </button>
