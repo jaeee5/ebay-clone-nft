@@ -37,8 +37,8 @@ const Home = () => {
                     duration-150 ease-out"
                 >
                   <div>
-                    <div className='flex flex-1 flex-col pb-2 items-center'>
-                      <MediaRenderer className='w-44' src={listing.asset.image} />
+                    <div className='flex flex-1 flex-col pb-2 items-center '>
+                      <MediaRenderer className='w-44 rounded-lg' src={listing.asset.image} />
                     </div>
 
                     <div className='pt-2 space-y-4'>

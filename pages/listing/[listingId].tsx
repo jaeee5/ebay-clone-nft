@@ -19,6 +19,7 @@ import Header from '../../components/Header';
 import Countdown from 'react-countdown'
 import network from '../../utils/network';
 import { ethers } from 'ethers';
+import toast, { Toaster } from 'react-hot-toast';
 
 type Props = {}
 
@@ -31,6 +32,14 @@ function ListingPage({}: Props) {
     const networkMismatch = useNetworkMismatch();
     const address = useAddress();
 
+    const notifyError = () => {
+        toast.dismiss();
+        toast.error('Unable to buy NFT');
+    };
+    const notifySuccess = () => {
+        toast.dismiss();
+        toast.success('Listing Created Successfully!');
+    };
 
     const [minimumNextBid, setMinimumNextBid] = useState<{
         displayValue: string;
@@ -103,13 +112,16 @@ function ListingPage({}: Props) {
     };
 
     const buyNft = async () => {
+        
         if (networkMismatch) {
             switchNetwork && switchNetwork(network);
             return;
         }
+    
+        if (!listingId || !contract || !listing) return notifyError();
 
-        if (!listingId || !contract || !listing) return;
-
+        toast.dismiss();
+        toast.loading("Buying...");
         await buyNow (
             {
                 id: listingId,
@@ -118,12 +130,14 @@ function ListingPage({}: Props) {
             },
             {
                 onSuccess(data, variables, context) {
-                    alert("NFT bought successfully!");
+                    toast.dismiss();
+                    toast.success("NFT bought successfully!");
                     console.log('SUCCESS', data, variables, context);
                     router.replace('/');
                 },
                 onError(error, variables, context) {
-                    alert("ERROR: NFT could not be bought");
+                    toast.dismiss();
+                    toast.success("ERROR: NFT could not be bought");
                     console.log("ERROR", error, variables, context);
                 },
             }
@@ -139,11 +153,11 @@ function ListingPage({}: Props) {
             // Driect Listing
             if (listing?.type === ListingType.Direct) {
                 if(listing.buyoutPrice.toString() === ethers.utils.parseEther(bidAmount).toString()) {
-                    console.log("Buyout Price met, buying NFT...");
+                    toast.loading("Buyout Price met, buying NFT...");
                     buyNft();
                     return;
                 }
-                console.log("Buyout price not met, making offer...")
+                toast.loading("Buyout price not met, making offer...");
                 await makeOffer(
                     {
                         listingId,
@@ -152,12 +166,14 @@ function ListingPage({}: Props) {
                     },
                     {
                         onSuccess(data, variables, context) {
-                            alert("Offer made successfully!");
+                            toast.dismiss();
+                            toast.success("Offer made successfully!");
                             console.log("SUCCESS", data, variables, context);
                             setBidAmount('')
                         },
                         onError(error, variables, context) {
-                            alert("ERROR: Offer could not be made");
+                            toast.dismiss();
+                            toast.error("Offer could not be made");
                             console.log("ERROR", error, variables, context);
                         },
                     }
@@ -165,7 +181,7 @@ function ListingPage({}: Props) {
             }
             // Auction Listing
             if (listing?.type === ListingType.Auction) {
-                console.log("Making bid...");
+                toast.loading("Making bid...");
 
                 await makeBid(
                     {
@@ -174,12 +190,14 @@ function ListingPage({}: Props) {
                     },
                     {
                         onSuccess(data, variables, context) {
-                            alert("Bid made successfully!");
+                            toast.dismiss();
+                            toast.success("Bid made successfully!");
                             console.log("SUCCESS",data, variables, context);
                             setBidAmount('')
                         },
                         onError(error, variables, context) {
-                            alert("ERROR: Bid could not be made");
+                            toast.dismiss();
+                            toast.error("Bid could not be made");
                             console.log("ERROR", error, variables, context);
                         },
                     }
@@ -209,7 +227,10 @@ function ListingPage({}: Props) {
     return (
         <div>
             <Header />
-
+            <Toaster 
+                position='top-center'
+                reverseOrder={false}
+            />
             <main className='max-w-6xl mx-auto p-2 flex flex-col lg:flex-row space-y-10
                 space-x-5 pr-10'
             >
@@ -263,9 +284,9 @@ function ListingPage({}: Props) {
                                 <>
                                     <p className='flex items-center ml-5 text-sm italic'>
                                         <UserCircleIcon className='h-3 mr-2'/>
-                                        {offer.offerer.slice(0, 5) +
+                                        {offer.offeror?.slice(0, 5) +
                                             "..." + 
-                                        offer.offerer.slice(-5)}
+                                        offer.offeror?.slice(-5)}
                                     </p>
                                     <div>
                                         <p
@@ -282,17 +303,20 @@ function ListingPage({}: Props) {
                                         {listing.sellerAddress === address && (
                                             <button
                                                 onClick={() => {
+                                                    toast.loading("Accepting...");
                                                     acceptOffer({
-                                                        addressOfOfferor: offer.offerer,
+                                                        addressOfOfferor: offer.offeror,
                                                         listingId,
                                                     },{
                                                         onSuccess(data, variables, context) {
-                                                            alert("Offer accepted successfully!");
+                                                            toast.dismiss();
+                                                            toast.success("Offer accepted successfully!");
                                                             console.log('SUCCESS', data, variables, context);
                                                             router.replace('/');
                                                         },
                                                         onError(error, variables, context) {
-                                                            alert("ERROR : Offer could not be accepted");
+                                                            toast.dismiss();
+                                                            toast.error("Offer could not be accepted");
                                                             console.log("ERROR", error, variables, context);
                                                         },
                                                     })

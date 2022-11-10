@@ -13,6 +13,7 @@ import {
 import { Router, useRouter } from 'next/router';
 import { ListingType, NFT, NATIVE_TOKENS, NATIVE_TOKEN_ADDRESS } from '@thirdweb-dev/sdk';
 import network from '../utils/network';
+import toast, { Toaster } from 'react-hot-toast';
 
 type Props = {}
 
@@ -53,6 +54,14 @@ function Create({}: Props) {
         error: errorAuction, 
     } = useCreateAuctionListing(contract);
 
+    const notifyError = () => {
+        toast.dismiss();
+        toast.error('Unable to create listing!');
+    };
+    const notifySuccess = () => {
+        toast.dismiss();
+        toast.success('Listing Created Successfully!');
+    };
     // This function gets called when the form is submitted
     // The user has provided:
     // - contract address
@@ -70,7 +79,7 @@ function Create({}: Props) {
             switchNetwork && switchNetwork(network)
         }
 
-        if (!selectedNft) return;
+        if (!selectedNft) return toast.error('Please Select an NFT');
 
         const target = e.target as typeof e.target & {
             elements: { listingType: { value: string }, price: { value: string }};
@@ -81,6 +90,9 @@ function Create({}: Props) {
         //assetContractAdress is the collection address we are going to mint from
         //tokenID is how it is stored in the collection, the token id
         if (listingType.value === "directListing") {
+            toast.loading("Listing...",{
+                id:'dList',
+            })
             createDirectListing({
                 assetContractAddress: process.env.NEXT_PUBLIC_COLLECTION_CONTRACT!,
                 tokenId: selectedNft.metadata.id,
@@ -91,16 +103,21 @@ function Create({}: Props) {
                 startTimestamp: new Date()
             }, {
                 onSuccess(data, variables, context) {
+                    notifySuccess();
                     console.log('SUCCESS: ', data, variables, context);
                     router.push('/');
                 },
                 onError(error, variables, context) {
+                    notifyError();
                     console.log('ERROR: ', error, variables, context );
                 },
             });
         };
 
         if (listingType.value === "auctionListing") {
+            toast.loading("Listing...",{
+                id:'aList',
+            })
             createAuctionListing({
                 assetContractAddress: process.env.NEXT_PUBLIC_COLLECTION_CONTRACT!,
                 tokenId: selectedNft.metadata.id,
@@ -112,10 +129,12 @@ function Create({}: Props) {
                 reservePricePerToken: 0
             }, {
                 onSuccess(data, variables, context) {
+                    notifySuccess();
                     console.log('SUCCESS: ', data, variables, context);
                     router.push('/');
                 },
                 onError(error, variables, context) {
+                    notifyError();
                     console.log('ERROR: ', error, variables, context );
                 },
             });
@@ -126,7 +145,10 @@ function Create({}: Props) {
     return (
         <div>
             <Header />
-
+            <Toaster 
+                position='top-center'
+                reverseOrder={false}
+            />
             <main className='max-w-6xl mx-auto p-10 pt-2'>
                 <h1 className='text-4xl font-bold'>List an Item</h1>
                 <h2 className='text-xl font-semibold pt-5'>Select an Item you would like to Sell</h2>

@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from 'react'
 import Header from '../components/Header'
 import { useAddress, useContract } from "@thirdweb-dev/react"
 import { useRouter } from 'next/router';
+import toast, { Toaster } from 'react-hot-toast';
 
 type Props = {}
 
@@ -16,14 +17,18 @@ function addItem({}: Props) {
         "nft-collection"
     );
 
+    const notifyError = () => toast.error('Unable to Mint NFT!');
+
     //console.log(contract);
     const mintNft = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (!contract || !address) return;
+        if (!contract || !address) return notifyError();
 
         if (!image) {
-            alert('Please select an image');
+            toast('Please select an image',{
+                icon: '📸'
+            });
             return;
         }
 
@@ -39,16 +44,30 @@ function addItem({}: Props) {
         }
 
         try {
-            const tx = await contract.mintTo(address, metadata);
+            
+            const txx = async() => {
+                const tx =  await  contract.mintTo(address, metadata) //tx means transcation
 
-            const receipt = tx.receipt; // the transaction reciept
-            const tokenId = tx.id; // the id of the NFT minted
-            const nft = tx.data; // (optional) fetch details of the minted NFT 
-
+                const receipt = tx.receipt; // the transaction reciept
+                const tokenId = tx.id; // the id of the NFT minted
+                const nft = tx.data; // (optional) fetch details of the minted NFT 
+                router.push("/");
+            };
+            
+            
+            toast.promise(
+                txx(),
+                {
+                    loading: 'Minting...',
+                    success: <b>NFT Minted Successfully!</b>,
+                    error: <b>Unable to Mint NFT!</b>,
+                }
+            )
             //console.log(receipt, tokenId, nft);
-            router.push("/");
+            //router.push("/");
         } catch (error) {
-            console.log(error)
+            console.log(error);
+            
         }
 
     }
@@ -56,7 +75,10 @@ function addItem({}: Props) {
     return (
         <div>
             <Header />
-
+            <Toaster 
+                position='top-center'
+                reverseOrder={false}
+            />
             <main className='max-w-6xl mx-auto p-10 border'>
                 <h1 className='text-4xl font-bold'>Add an Item to the Marketplace</h1>
                 <h2 className='text-xl font-semibold pt-5'>Item Details</h2>
@@ -106,7 +128,9 @@ function addItem({}: Props) {
                                 }
                         }}/>
 
-                        <button type="submit" className='bg-blue-600 font-bold text-white rounded-full py-4 px-10
+                        <button 
+                            type="submit" 
+                            className='bg-blue-600 font-bold text-white rounded-full py-4 px-10
                             w-56 mt-5 md:mt-auto mx-auto md:ml-auto
                         '>
                             Add/Mint Item
