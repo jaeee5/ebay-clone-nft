@@ -137,7 +137,7 @@ function ListingPage({}: Props) {
                 },
                 onError(error, variables, context) {
                     toast.dismiss();
-                    toast.success("ERROR: NFT could not be bought");
+                    toast.error("ERROR: NFT could not be bought");
                     console.log("ERROR", error, variables, context);
                 },
             }
