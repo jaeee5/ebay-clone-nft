@@ -19,7 +19,7 @@ function addItem({}: Props) {
 
     const notifyError = () => toast.error('Unable to Mint NFT!');
 
-    //console.log(contract);
+    console.log(contract);
     const mintNft = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -42,7 +42,7 @@ function addItem({}: Props) {
             description: target.description.value,
             image: image,
         }
-
+        console.log(metadata)
         try {
             
             const txx = async() => {

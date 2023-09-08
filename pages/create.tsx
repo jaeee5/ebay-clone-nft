@@ -36,8 +36,8 @@ function Create({}: Props) {
     //address is owner that is signed in
     const ownedNfts = useOwnedNFTs(collectionContract, address);
 
-    // console.log("Address:", address);
-    // console.log("OwnedNFTs:", ownedNfts);
+    console.log("Address:", address);
+    console.log("OwnedNFTs:", ownedNfts);
 
     const networkMismatch = useNetworkMismatch();
     const [, switchNetwork] = useNetwork();
@@ -87,7 +87,7 @@ function Create({}: Props) {
 
         const {listingType, price} = target.elements;
 
-        //assetContractAdress is the collection address we are going to mint from
+        //assetContractAddress is the collection address we are going to mint from
         //tokenID is how it is stored in the collection, the token id
         if (listingType.value === "directListing") {
             toast.loading("Listing...",{

@@ -9,6 +9,7 @@ import Link from 'next/link';
 import Header from '../components/Header'
 
 
+
 const Home = () => {
   
   const { contract } = useContract(
@@ -19,7 +20,9 @@ const Home = () => {
   //use actives listings hook takes in the contract we create from the hook to pull in actives listings from marketplace
   const { data: listings, isLoading: loadingListings} = 
     useActiveListings(contract);
-
+  
+  console.log(contract)
+  console.log(listings)
   return (
     <div className="">
       {/* <Header /> */}

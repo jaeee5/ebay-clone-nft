@@ -7,8 +7,9 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.0.13",
-    "@thirdweb-dev/react": "^3.5.1",
-    "@thirdweb-dev/sdk": "^3.5.1",
+    "@thirdweb-dev/chains": "^0.1.50",
+    "@thirdweb-dev/react": "^3.14.35",
+    "@thirdweb-dev/sdk": "^3.10.54",
     "ethers": "^5.7.2",
     "next": "latest",
     "next-themes": "^0.2.1",
@@ -18,7 +19,7 @@
     "react-hot-toast": "^2.4.0"
   },
   "devDependencies": {
-    "@types/node": "18.11.3",
+    "@types/node": "^18.11.3",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
     "autoprefixer": "^10.4.12",

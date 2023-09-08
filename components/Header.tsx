@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useAddress, useDisconnect, useMetamask } from "@thirdweb-dev/react"
+import { useAddress, useDisconnect, useMetamask, useChainId } from "@thirdweb-dev/react"
 import Link from 'next/link';
 import {
     BellIcon,
@@ -42,6 +42,7 @@ function Header({}: Props) {
             )
         }
     }
+    const chainId = useChainId();
     const connectWithMetamask = useMetamask();
     const disconnect = useDisconnect();
     const address = useAddress();
@@ -58,7 +59,7 @@ function Header({}: Props) {
                     )
                     :
                     (
-                        <button onClick={connectWithMetamask} className="connectWalletBtn"> 
+                        <button onClick={()=>connectWithMetamask({chainId: chainId})} className="connectWalletBtn"> 
                             Connect your wallet 
                         </button>
                     )
