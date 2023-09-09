@@ -36,8 +36,8 @@ function Create({}: Props) {
     //address is owner that is signed in
     const ownedNfts = useOwnedNFTs(collectionContract, address);
 
-    console.log("Address:", address);
-    console.log("OwnedNFTs:", ownedNfts);
+    //console.log("Address:", address);
+    //console.log("OwnedNFTs:", ownedNfts);
 
     const networkMismatch = useNetworkMismatch();
     const [, switchNetwork] = useNetwork();
@@ -93,6 +93,28 @@ function Create({}: Props) {
             toast.loading("Listing...",{
                 id:'dList',
             })
+            // const listing = {
+            //     // address of the NFT contract the asset you want to list is on
+            //     assetContractAddress: process.env.NEXT_PUBLIC_COLLECTION_CONTRACT!,
+            //     // token ID of the asset you want to list
+            //     tokenId: selectedNft.metadata.id,
+            //     // when should the listing open up for offers
+            //     startTimestamp: new Date(),
+            //     // how long the listing will be open for
+            //     listingDurationInSeconds: 60 * 60 * 24 * 7, // 1 week
+            //     // how many of the asset you want to list
+            //     quantity: 1,
+            //     // address of the currency contract that will be used to pay for the listing
+            //     currencyContractAddress: NATIVE_TOKEN_ADDRESS,
+            //     // how much the asset will be sold for
+            //     buyoutPricePerToken: price.value,
+            //     }
+
+            //     const tx = await contract?.direct.createListing(listing);
+            //     const receipt = tx?.receipt; // the transaction receipt
+            //     const listingId = tx?.id; // the id of the newly created listing
+            //     console.log(receipt)
+            //     console.log(listingId)
             createDirectListing({
                 assetContractAddress: process.env.NEXT_PUBLIC_COLLECTION_CONTRACT!,
                 tokenId: selectedNft.metadata.id,

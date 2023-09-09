@@ -21,8 +21,8 @@ const Home = () => {
   const { data: listings, isLoading: loadingListings} = 
     useActiveListings(contract);
   
-  console.log(contract)
-  console.log(listings)
+  //console.log(contract)
+  //console.log(listings)
   return (
     <div className="">
       {/* <Header /> */}
